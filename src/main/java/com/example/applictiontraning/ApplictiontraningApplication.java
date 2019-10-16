@@ -11,6 +11,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Collections;
+
 import static com.google.common.base.Predicates.or;
 import static springfox.documentation.builders.PathSelectors.regex;
 
@@ -26,6 +28,8 @@ public class ApplictiontraningApplication {
 	@Bean
 	public Docket petApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
+				.protocols(Collections.singleton("https"))
+				.host("tanaka.hackrblackwhite.xyz")
 				.select() // ApiSelector : Swaggerで書き起こすAPIを選択する。
 				.paths(paths())
 				.build() // ApiSelectorを作成
