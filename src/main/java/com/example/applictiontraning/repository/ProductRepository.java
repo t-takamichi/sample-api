@@ -37,17 +37,25 @@ public class ProductRepository {
     }
 
     public Product saveOrUpdate(Product product) {
-        ProductEntity entity = new ProductEntity();
-
-        if (product.getProductId() != null) {
-            entity.setProductId(product.getProductId());
+        ProductEntity entity;
+        if(product.getProductId() != null){
+            entity = productJpaRepository
+                                .findById(product.getProductId())
+                                .orElse(null);
+            if(entity != null){
+                entity.setProductName(product.getProductName());
+                entity.setUnitPrice(product.getUnitPrice());
+                return productJpaRepository.save(entity).toProduct();
+            }
         }
+        entity = new ProductEntity();
         entity.setProductName(product.getProductName());
         entity.setUnitPrice(product.getUnitPrice());
         return productJpaRepository
                 .save(entity)
                 .toProduct();
     }
+    
 
 
 }

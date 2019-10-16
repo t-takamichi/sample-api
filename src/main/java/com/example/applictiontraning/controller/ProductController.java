@@ -36,6 +36,7 @@ public class ProductController {
 
     @RequestMapping(value = "/{productId}", method = RequestMethod.PUT, produces = {"application/json", "application/xml", "text/xml"}, consumes = MediaType.ALL_VALUE)
     public ProductResponse updateProduct(@PathVariable Integer productId, @RequestBody ProductRequest productRequest) throws Exception {
+        productRequest.setProductId(productId);
         return productService.update(productRequest);
     }
 

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Objects;
 
 @Service
@@ -40,7 +41,7 @@ public class ProductService {
         ProductResponse productResponse = ProductResponse.builder().product(product).build();
         return productResponse;
     }
-
+    @Transactional
     public ProductResponse update(ProductRequest productRequest) throws Exception {
 
         if (Objects.isNull(productRequest.getProductName()) && Objects.isNull(productRequest.getUnitPrice())
@@ -49,20 +50,19 @@ public class ProductService {
             throw  new BadRequestException("invalid request parameter");
         }
         Product product = Product.builder()
+                .productId(productRequest.getProductId())
                 .productName(productRequest.getProductName())
                 .unitPrice(productRequest.getUnitPrice())
                 .build();
 
-
-        if (product != null) {
-            product = productRepository.saveOrUpdate(product);
-        }
+        product = productRepository.saveOrUpdate(product);
 
 
         ProductResponse productResponse = ProductResponse.builder().product(product).build();
         return productResponse;
     }
 
+    @Transactional
     public ProductResponse save(ProductPostRequest productPostRequest) throws Exception {
 
         if(Objects.isNull(productPostRequest.getProductName()) && Objects.isNull(productPostRequest.getUnitPrice() )){
@@ -80,6 +80,7 @@ public class ProductService {
         return productResponse;
     }
 
+    @Transactional
     public void delete(Integer productId) throws Exception {
         Product product = null;
         try {
